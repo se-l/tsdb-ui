@@ -31,11 +31,12 @@ export default function DatasetsList() {
             (ds) => {
                 aC.setDropZones(
                   new DropZone(
-                    dataDrawerDropId + ds.name,
+                    ds.id,
+                    dataDrawerDropId,
                     _.map(
                       _.keys(ds.schema),
                       (name) =>
-                        new ChipItem(name, ds.schema[name], dataDrawerDropId)
+                        new ChipItem(name, ds.schema[name], `${ds.id}-${dataDrawerDropId}`)
                     )
                   )
                 );
@@ -79,7 +80,7 @@ export default function DatasetsList() {
                   >
                     <ListItemIcon>
                       {openDropZones[ds.name] ? <ExpandLess /> : <ExpandMore />}
-                      <TableView fontSize="small" />
+                      <TableView fontSize="small" sx={{ ml: -2}}/>
                     </ListItemIcon>
                     <ListItemText primary={ds.name} />
                   </MenuItem>
@@ -89,7 +90,7 @@ export default function DatasetsList() {
                     unmountOnExit
                   >
                     <DropZoneC
-                      dropZone={aC.dropZones[dataDrawerDropId + ds.name]}
+                      dropZone={aC.dropZones[`${ds.id}-${dataDrawerDropId}`]}
                       header=""
                     ></DropZoneC>
                   </Collapse>

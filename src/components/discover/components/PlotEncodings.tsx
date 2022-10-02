@@ -1,7 +1,6 @@
 import * as _ from "lodash";
 import { Box, Typography } from "@mui/material";
-import React, {useContext } from "react";
-import { AppContext } from "../../../AppContext";
+import React from "react";
 import { DropZone } from "../classes/DropZone";
 import { DropZoneC } from "./DropZoneC";
 import { ColorLens, TextFormat } from "@mui/icons-material";
@@ -23,19 +22,17 @@ const getHeaderJsx = (name: string): JSX.Element => {
 }
 
 interface IPlotEncodings {
-    id: string;
     dropZones: DropZone[];
 }
 
-export default React.memo(function PlotEncodings({id, dropZones}: IPlotEncodings) {
+export default React.memo(function PlotEncodings({dropZones}: IPlotEncodings) {
     console.log("PlotEncodings")
-    const aC = useContext(AppContext)
 
     return (
         <Box>
             <Typography sx={{ fontWeight: "bold" }}>Encoding</Typography>
             {_.map(dropZones, (dz) => {
-                return <DropZoneC dropZone={aC.dropZones[dz.id]} header={getHeaderJsx(dz.name)} />;
+                return <DropZoneC dropZone={dz} header={getHeaderJsx(dz.name)} />;
             })}
         </Box>
     )

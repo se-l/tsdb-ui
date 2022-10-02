@@ -2,14 +2,20 @@ import * as _ from "lodash";
 import { ChipItem } from "./ChipItem";
 
 export class DropZone {
-    id: string;
+    cellId: number;
+    dropZoneName: string;
     items: ChipItem[];
     name: string;
 
-    constructor(id: string, items: ChipItem[], name: string = "") {
-        this.id = id;
+    constructor(cellId: number, dropZoneName: string, items: ChipItem[], name: string = "") {
+        this.cellId = cellId;
+        this.dropZoneName = dropZoneName;
         this.items = items;
-        this.name = name === "" ? id: name
+        this.name = name === "" ? this.id: name
+    }
+
+    get id() {
+      return `${this.cellId}-${this.dropZoneName}`
     }
 
     itemNames() {

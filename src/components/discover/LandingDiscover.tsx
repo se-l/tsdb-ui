@@ -14,7 +14,6 @@ import { Dataset } from "./classes/Dataset";
 import Layout from "../../Layout";
 import { CellType } from "./types/CellType";
 import CellC from "./components/CellC";
-import DragResize from "./components/DragResize";
 import "./discover.css"
 
 
@@ -63,12 +62,11 @@ export default function LandingDiscover() {
     const sInd = source.droppableId;
     const dInd = destination.droppableId;
     if (sInd === dInd) {
-      const items = reorder(
+      aC.dropZones[sInd].items = reorder(        
         (aC.dropZones[sInd] || { items: [] }).items,
         source.index,
         destination.index
       );
-      aC.setDropZones({ doppableId: sInd, items: items });
     } else {
       const result = move(
         (aC.dropZones[sInd] || { items: [] }).items,
@@ -76,8 +74,10 @@ export default function LandingDiscover() {
         source,
         destination
       );
-      aC.setDropZones(new DropZone(sInd, result[sInd]));
-      aC.setDropZones(new DropZone(dInd, result[dInd]));
+      aC.dropZones[dInd].items = result[dInd]
+      aC.dropZones[sInd].items = result[sInd]
+      aC.setDropZones(aC.dropZones[dInd].items);
+      aC.setDropZones(aC.dropZones[sInd].items);
     }
     aC.setRedrawGrid(aC.redrawGrid + 1);
   };
@@ -99,35 +99,8 @@ export default function LandingDiscover() {
               new View(
                 o.folder,
                 o.name,
-                _.map(
-                  o.datasets,
-                  (ds: any) => new Dataset(ds.name, ds.schema, ds.data, ds.code)
-                ),
-                _.map(
-                  o.cells,
-                  (c: any) =>
-                    new Cell(
-                      c.type,
-                      _.map(
-                        c.dropZones,
-                        (dz) =>
-                          new DropZone(
-                            dz.id,
-                            _.map(
-                              dz.items,
-                              (item) =>
-                                new ChipItem(
-                                  item.name,
-                                  item.type,
-                                  item.droppableId
-                                )
-                            )
-                          )
-                      )
-                    )
-                )
-              )
-          );
+                [], [], []
+          ));
           aC.setViews(views);
         });
       } else {
@@ -136,16 +109,15 @@ export default function LandingDiscover() {
     });
   }, [aC.apiUrl]);
 
-  const appendNewCell = (cellType: CellType) => {
-    let id = String(aC.cells.length + 1);
-    let dropZones = _.map(Object.keys(mapEncodingHeader), (encoding) => {
-      return new DropZone(id + encoding, [], mapEncodingHeader[encoding]);
-    });
-    _.forEach(dropZones, (dz) => {
-      aC.setDropZones(dz);
-    });
-    aC.setCells(aC.cells.concat(new Cell(cellType, dropZones, "")));
-  };
+  const getReqY = (): number => {
+    let posYs = _.map(aC.cells, (c) => c.getPosition().y)
+    let posY = Math.max(...posYs)
+    if (posYs.length > 0) {
+      return posY + aC.cells[posYs.indexOf(posY)].getSize().height + 100
+    } else {
+      return 0
+    }
+  }
 
   return (
     <DragDropContext onDragEnd={onDragEnd}>
@@ -159,26 +131,6 @@ export default function LandingDiscover() {
             })}
           </Stack>
           <Divider />
-          <DragResize>
-            <Stack direction="row" spacing={2}>
-              <Typography>Add Cell:</Typography>
-              <ButtonGroup
-                sx={{ margin: 1, display: "table" }}
-                size="small"
-                aria-label="small secondary button group"
-              >
-                {_.map(CellType, (key) => (
-                  <Button
-                    id={`newCellButton-${key}`}
-                    variant="outlined"
-                    onClick={() => appendNewCell(key)}
-                  >
-                    {key}
-                  </Button>
-                ))}
-              </ButtonGroup>
-            </Stack>
-          </DragResize>
         </Box>
       </Box>
     </DragDropContext>

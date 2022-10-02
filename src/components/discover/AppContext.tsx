@@ -19,6 +19,8 @@ interface IAppContextDiscover {
     setCells: any;
     openDatasets: boolean;
     setOpenDatasets: any;
+    enableRnd: boolean;
+    setEnableRnd: any;
 }
 
 export const AppContextDiscover: IAppContextDiscover = {
@@ -36,6 +38,8 @@ export const AppContextDiscover: IAppContextDiscover = {
     setCells: null,
     openDatasets: false,
     setOpenDatasets: null,
+    enableRnd: true,
+    setEnableRnd: null,
 }
 
 const zoneReducer = (state: any, dropZone: DropZone) => {
@@ -55,6 +59,7 @@ export function AppContextDiscoverValues(): IAppContextDiscover {
   const [views, setViews] = useState<View[]>([]);
   const [discoveryDataModalOpen, setDiscoverDataModalOpen] = useState(false);
   const [openDatasets, setOpenDatasets] = useState<boolean>(false);
+  const [enableRnd, setEnableRnd] = useState<boolean>(false);
 
   return {
     dropZones: dropZones,
@@ -71,5 +76,7 @@ export function AppContextDiscoverValues(): IAppContextDiscover {
     setCells: setCells,
     openDatasets: openDatasets,
     setOpenDatasets: setOpenDatasets,
+    enableRnd: enableRnd,
+    setEnableRnd: setEnableRnd,
   };
 }

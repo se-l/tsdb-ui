@@ -36,7 +36,7 @@ export function DropZoneC({
                             <List sx={{ width: "100px"}} dense disablePadding>
                                 {(aC.dropZones[dropZone.id] || {items: []}).items.map(
                                     (chipItem: ChipItem, index: number) => (
-                                    <ListItem key={index+chipItem.droppableId+chipItem.name}>
+                                    <ListItem key={index+chipItem.dropZoneId+chipItem.name}>
                                         <ChipDnd index={index} chipItem={chipItem} />
                                     </ListItem>
                                     )

@@ -91,7 +91,7 @@ export default function Layout({ sideBarContent, toolBarContent}: ILayout) {
               <Button onClick={() => setHomeOpen(!homeOpen)}>
                 <Home />
                 <Typography variant="h6" ml={1} noWrap sx={{ flexGrow: 1 }}>
-                  Discover
+                  Discoveryyyy
                 </Typography>
               </Button>
               {toolBarContent}
@@ -104,8 +104,7 @@ export default function Layout({ sideBarContent, toolBarContent}: ILayout) {
                   <Typography
                     variant="overline"
                     sx={{ pl: 1, py: 1, fontWeight: "bold" }}
-                  >
-                    Controls
+                  >                    
                   </Typography>
                   <IconButton onClick={toggleDrawer} size="large">
                     <ChevronLeft />

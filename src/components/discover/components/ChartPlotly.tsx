@@ -4,7 +4,6 @@ import Plot from "react-plotly.js"
 import { propsAreEqual } from "../../../utils";
 
 interface IChartPlotly {
-    id: string;
     data: any[];
     dropZoneAxisXItems?: string[];
     dropZoneAxisYItems?: string[];
@@ -12,8 +11,8 @@ interface IChartPlotly {
     dropZoneMarksColorItems?: string[];
 }
 
-export const ChartPlotly = React.memo(({id, data, dropZoneAxisXItems=[], dropZoneAxisYItems=[], dropZoneMarksTextItems=[], dropZoneMarksColorItems=[]}: IChartPlotly ) => {
-    console.log(`Render ChartPlotly ${id}`)
+export const ChartPlotly = React.memo(({data, dropZoneAxisXItems=[], dropZoneAxisYItems=[], dropZoneMarksTextItems=[], dropZoneMarksColorItems=[]}: IChartPlotly ) => {
+    console.log(`Render ChartPlotly`)
 
     let x = []
     let y = []

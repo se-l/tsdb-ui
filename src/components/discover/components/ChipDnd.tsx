@@ -4,19 +4,24 @@ import { Draggable } from "react-beautiful-dnd";
 import { AppContext } from "../../../AppContext";
 import { NumbersSharp, TextFieldsSharp } from "@mui/icons-material"
 import { ChipItem } from "../classes/ChipItem";
-import { IChipDnd } from "../types/IChipDnd";
-import { DropZone } from "../classes/DropZone";
 import { dataDrawerDropId } from "../Const";
+
+interface IChipDnd {
+    index: number;
+    chipItem: ChipItem;
+}
 
 export function ChipDnd({index, chipItem}: IChipDnd) {
     const aC = useContext(AppContext)
 
     const handleDelete = (chipItem: ChipItem) => (data: any) => {
-        let zone = aC.dropZones[chipItem.droppableId]
-        const newArr = Array.from((aC.dropZones[chipItem.droppableId] || {items: []}).items)
+        let zone = aC.dropZones[chipItem.dropZoneId]
+        const newArr = Array.from((aC.dropZones[chipItem.dropZoneId] || {items: []}).items)
         const ixItem: number = newArr.indexOf(chipItem)
         const [removed] = newArr.splice(ixItem, 1);
-        aC.setDropZones(new DropZone(zone.id, newArr, zone.name))
+        let dz = aC.dropZones[chipItem.dropZoneId]
+        dz.items = newArr
+        aC.setDropZones(dz)
         aC.setRedrawGrid(aC.redrawGrid + 1)
     }
 
@@ -26,19 +31,19 @@ export function ChipDnd({index, chipItem}: IChipDnd) {
     }
 
     return (
-        <Draggable key={chipItem.droppableId + chipItem.name} draggableId={chipItem.droppableId + chipItem.name} index={index}>
+        <Draggable key={chipItem.dropZoneId + chipItem.name} draggableId={chipItem.dropZoneId + chipItem.name} index={index}>
             {(provided) => (
                 <div ref={provided.innerRef}
                 {...provided.draggableProps}
                 {...provided.dragHandleProps}
                 >
                     <Chip 
-                    key={chipItem.droppableId + chipItem.name}
+                    key={chipItem.dropZoneId + chipItem.name}
                     avatar={type2Icon[chipItem.type]}
                     label={chipItem.name}
                     variant="outlined"
                     color="secondary"
-                    onDelete={chipItem.droppableId === dataDrawerDropId ? undefined : handleDelete(chipItem)}
+                    onDelete={chipItem.dropZoneId === dataDrawerDropId ? undefined : handleDelete(chipItem)}
                 />
                 </div>
                 )}
